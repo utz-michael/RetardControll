@@ -47,7 +47,7 @@ void setup() {
   pinMode(TransbrakePIN, INPUT);     //transbrake
 
   //NOS ausgang ausschalten
-  digitalWrite(RevoPIN, HIGH);
+  digitalWrite(RevoPIN, LOW);
 
   // SPI Wiederstand setup
   SPI.begin();
@@ -124,7 +124,7 @@ void loop()
     lcd.print("     on        ");
     
     do {
-      digitalWrite(RevoPIN, LOW);
+      digitalWrite(RevoPIN, HIGH);
 
 
 
@@ -135,7 +135,7 @@ void loop()
       vDelay = mDelay - lastDelay;  // Differenz zum letzten Durchlauf berechnen
 
       if (vDelay > 10000000 ) {
-        digitalWrite(RevoPIN, HIGH);  // nos dauer
+        digitalWrite(RevoPIN, LOW);  // nos dauer
         digitalPotWrite(0, 0); //  Retard ausschalten Wiederstandswert setzen  48.82 Ohm pro einheit
         nosactive = 0;
       }
