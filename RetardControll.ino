@@ -344,67 +344,67 @@ void retardFormel() {
 
   RetardEingang = digitalSmooth(analogRead(5), sensSmoothArray1) ; // einlesen und Filtern der Analogen Spannung vom REVO Controller
   //----- Berechnung des Wiederstandes und des Retards------------------------------------------------
-
-if ( RetardEingang <= 32 ) { int i = 0;}
-if ( 33 <= RetardEingang || RetardEingang <= 97 ) { int i = 1;}
-if ( 98 <= RetardEingang || RetardEingang <= 164 ) { int i = 2;}
-if ( 165 <= RetardEingang || RetardEingang <= 232 ) { int i = 3;}
-if ( 233 <= RetardEingang || RetardEingang <= 299 ) { int i = 4;}
-if ( 300 <= RetardEingang || RetardEingang <= 366 ) { int i = 5;}
-if ( 367 <= RetardEingang || RetardEingang <= 433 ) { int i = 6;}
-if ( 434 <= RetardEingang || RetardEingang <= 500 ) { int i = 7;}
-if ( 501 <= RetardEingang || RetardEingang <= 565 ) { int i = 8;}
-if ( 566 <= RetardEingang || RetardEingang <= 631 ) { int i = 9;}
-if ( 632 <= RetardEingang || RetardEingang <= 698 ) { int i = 10;}
-if ( 699 <= RetardEingang || RetardEingang <= 764 ) { int i = 11;}
-if ( 765 <= RetardEingang || RetardEingang <= 832 ) { int i = 12;}
-if ( 833 <= RetardEingang || RetardEingang <= 899 ) { int i = 13;}
-if ( 900 <= RetardEingang || RetardEingang <= 942 ) { int i = 14;}
-if ( 943 < RetardEingang ) { int i = 15;}
-
+//Serial.println(RetardEingang);
+if ( RetardEingang <= 32 ) { i = 0;}
+if ( 33 <= RetardEingang && RetardEingang <= 97 ) {  i = 1;}
+if ( 98 <= RetardEingang && RetardEingang <= 164 ) {  i = 2;}
+if ( 165 <= RetardEingang && RetardEingang <= 232 ) {  i = 3;}
+if ( 233 <= RetardEingang && RetardEingang <= 299 ) {  i = 4;}
+if ( 300 <= RetardEingang && RetardEingang <= 366 ) {  i = 5;}
+if ( 367 <= RetardEingang && RetardEingang <= 433 ) {  i = 6;}
+if ( 434 <= RetardEingang && RetardEingang <= 500 ) {  i = 7;}
+if ( 501 <= RetardEingang && RetardEingang <= 565 ) {  i = 8;}
+if ( 566 <= RetardEingang && RetardEingang <= 631 ) {  i = 9;}
+if ( 632 <= RetardEingang && RetardEingang <= 698 ) {  i = 10;}
+if ( 699 <= RetardEingang && RetardEingang <= 764 ) {  i = 11;}
+if ( 765 <= RetardEingang && RetardEingang <= 832 ) {  i = 12;}
+if ( 833 <= RetardEingang && RetardEingang <= 899 ) {  i = 13;}
+if ( 900 <= RetardEingang && RetardEingang <= 942 ) {  i = 14;}
+if ( 943 < RetardEingang ) {  i = 15;}
+//Serial.println(i);
 if (i != i_old){
 
 if ( Retard[i] == 0 ){ digitalPotWrite(0,0);}
-if ( Retard[i] == 5 ){ digitalPotWrite(0,345/48.828125);}
-if ( Retard[i] == 10 ){ digitalPotWrite(0,820/48.828125);}
-if ( Retard[i] == 15 ){ digitalPotWrite(0,1295/48.828125);}
-if ( Retard[i] == 20 ){ digitalPotWrite(0,1770/48.828125);}
-if ( Retard[i] == 25 ){ digitalPotWrite(0,2245/48.828125);}
-if ( Retard[i] == 30 ){ digitalPotWrite(0,2720/48.828125);}
-if ( Retard[i] == 35 ){ digitalPotWrite(0,3195/48.828125);}
-if ( Retard[i] == 40 ){ digitalPotWrite(0,3670/48.828125);}
-if ( Retard[i] == 45 ){ digitalPotWrite(0,4160/48.828125);}
-if ( Retard[i] == 50 ){ digitalPotWrite(0,4650/48.828125);}
-if ( Retard[i] == 55 ){ digitalPotWrite(0,5155/48.828125);}
-if ( Retard[i] == 60 ){ digitalPotWrite(0,5660/48.828125);}
-if ( Retard[i] == 65 ){ digitalPotWrite(0,6180/48.828125);}
-if ( Retard[i] == 70 ){ digitalPotWrite(0,6700/48.828125);}
-if ( Retard[i] == 75 ){ digitalPotWrite(0,7245/48.828125);}
-if ( Retard[i] == 80 ){ digitalPotWrite(0,7790/48.828125);}
-if ( Retard[i] == 85 ){ digitalPotWrite(0,8325/48.828125);}
-if ( Retard[i] == 90 ){ digitalPotWrite(0,8860/48.828125);}
-if ( Retard[i] == 95 ){ digitalPotWrite(0,9430/48.828125);}
-if ( Retard[i] == 100 ){ digitalPotWrite(0,10000/48.828125);}
-if ( Retard[i] == 105 ){ digitalPotWrite(0,10585/48.828125);}
-if ( Retard[i] == 110 ){ digitalPotWrite(0,11170/48.828125);}
-if ( Retard[i] == 115 ){ digitalPotWrite(0,11765/48.828125);}
-if ( Retard[i] == 120 ){ digitalPotWrite(0,12360/48.828125);}
-if ( Retard[i] == 125 ){ digitalPotWrite(0,12980/48.828125);}
-if ( Retard[i] == 130 ){ digitalPotWrite(0,13600/48.828125);}
-if ( Retard[i] == 135 ){ digitalPotWrite(0,14240/48.828125);}
-if ( Retard[i] == 140 ){ digitalPotWrite(0,14880/48.828125);}
-if ( Retard[i] == 145 ){ digitalPotWrite(0,15530/48.828125);}
-if ( Retard[i] == 150 ){ digitalPotWrite(0,16180/48.828125);}
-if ( Retard[i] == 155 ){ digitalPotWrite(0,16865/48.828125);}
-if ( Retard[i] == 160 ){ digitalPotWrite(0,17550/48.828125);}
-if ( Retard[i] == 165 ){ digitalPotWrite(0,18235/48.828125);}
-if ( Retard[i] == 170 ){ digitalPotWrite(0,18920/48.828125);}
-if ( Retard[i] == 175 ){ digitalPotWrite(0,19660/48.828125);}
-if ( Retard[i] == 180 ){ digitalPotWrite(0,20400/48.828125);}
-if ( Retard[i] == 185 ){ digitalPotWrite(0,21150/48.828125);}
-if ( Retard[i] == 190 ){ digitalPotWrite(0,21900/48.828125);}
-if ( Retard[i] == 195 ){ digitalPotWrite(0,22665/48.828125);}
-if ( Retard[i] == 200 ){ digitalPotWrite(0,23430/48.828125);}
+if ( Retard[i] == 5 ){ digitalPotWrite(0,7);}
+if ( Retard[i] == 10 ){ digitalPotWrite(0,17);}
+if ( Retard[i] == 15 ){digitalPotWrite(0,27 );}
+if ( Retard[i] == 20 ){digitalPotWrite(0,36);}
+if ( Retard[i] == 25 ){ digitalPotWrite(0,46);}
+if ( Retard[i] == 30 ){ digitalPotWrite(0,56);}
+if ( Retard[i] == 35 ){ digitalPotWrite(0,65);}
+if ( Retard[i] == 40 ){ digitalPotWrite(0,75);}
+if ( Retard[i] == 45 ){ digitalPotWrite(0,85);}
+if ( Retard[i] == 50 ){ digitalPotWrite(0,95);}
+if ( Retard[i] == 55 ){ digitalPotWrite(0,106);}
+if ( Retard[i] == 60 ){ digitalPotWrite(0,116);}
+if ( Retard[i] == 65 ){ digitalPotWrite(0,127);}
+if ( Retard[i] == 70 ){ digitalPotWrite(0,137);}
+if ( Retard[i] == 75 ){ digitalPotWrite(0,148);}
+if ( Retard[i] == 80 ){ digitalPotWrite(0,160);}
+if ( Retard[i] == 85 ){ digitalPotWrite(0,170);}
+if ( Retard[i] == 90 ){ digitalPotWrite(0,181);}
+if ( Retard[i] == 95 ){ digitalPotWrite(0,193);}
+if ( Retard[i] == 100 ){ digitalPotWrite(0,205);}
+if ( Retard[i] == 105 ){ digitalPotWrite(0,217);}
+if ( Retard[i] == 110 ){ digitalPotWrite(0,229);}
+if ( Retard[i] == 115 ){ digitalPotWrite(0,241);}
+if ( Retard[i] == 120 ){ digitalPotWrite(0,253);}
+if ( Retard[i] == 125 ){ digitalPotWrite(0,266);}
+if ( Retard[i] == 130 ){ digitalPotWrite(0,279);}
+if ( Retard[i] == 135 ){ digitalPotWrite(0,292);}
+if ( Retard[i] == 140 ){ digitalPotWrite(0,305);}
+if ( Retard[i] == 145 ){ digitalPotWrite(0,318);}
+if ( Retard[i] == 150 ){ digitalPotWrite(0,331);}
+if ( Retard[i] == 155 ){ digitalPotWrite(0,345);}
+if ( Retard[i] == 160 ){ digitalPotWrite(0,359);}
+if ( Retard[i] == 165 ){ digitalPotWrite(0,373);}
+if ( Retard[i] == 170 ){ digitalPotWrite(0,387);}
+if ( Retard[i] == 175 ){ digitalPotWrite(0,403);}
+if ( Retard[i] == 180 ){ digitalPotWrite(0,418);}
+if ( Retard[i] == 185 ){ digitalPotWrite(0,433);}
+if ( Retard[i] == 190 ){ digitalPotWrite(0,449);}
+if ( Retard[i] == 195 ){ digitalPotWrite(0,464);}
+if ( Retard[i] == 200 ){ digitalPotWrite(0,480);}
 }
 i_old = i;
   return;
