@@ -10,11 +10,13 @@ const int TransbrakePIN = 2;     // the number of the pushbutton pin Transbrake 
 
 const int RevoPIN =  3;      // the number of the LED pin NOS
 
-
+const int NOSArming =  1;
 
 // variables will change:
 int keyPress;                  // LCD Button
-int buttonState = LOW;         // variable for reading the pushbutton status
+int buttonState = LOW; // variable for reading the pushbutton status
+int Arming = HIGH;
+boolean Armed = false;
 int nosactive;
 int x;
 int i;
@@ -41,13 +43,16 @@ void setup() {
   Serial.begin(9600);
 
   pinMode(RevoPIN, OUTPUT);    // Nos Aktiv
+  
 
 
   // initialize the pushbutton pin as an input:
   pinMode(TransbrakePIN, INPUT);     //transbrake
-
+  pinMode(NOSArming, INPUT);     //Arming switch
+  digitalWrite(NOSArming, HIGH);
   //NOS ausgang ausschalten
   digitalWrite(RevoPIN, LOW);
+  
 
   // SPI Wiederstand setup
   SPI.begin();
@@ -84,6 +89,10 @@ void loop()
 
   buttonState = digitalRead(TransbrakePIN); // abfrage transbrake
   
+  Arming = digitalRead(NOSArming); // abfrage transbrake
+
+if ( Arming == LOW) {Armed = true;} // Arming button abfragen
+
 
   keyPress = analogRead(0);
   if (keyPress < 600 && keyPress > 400 ) {
@@ -98,15 +107,18 @@ void loop()
     lcd.print("     active     ");
   }
 
+
+
+
   // Abfrage der steigenden flanke des Transbrake Buttons
-  if (buttonState == HIGH && x == 0 ) {
+  if (buttonState == HIGH && x == 0 && Armed == true) {
     delay (1000);
     x = 1; // steigende Flanke dedektiert
     nosactive = 0; // nos timer sicher ausgeschaltet
   }
 
   // Abfrage der fallenden Flanke des Transbrake Buttons
-  if (buttonState == LOW && x == 1 ) {
+  if (buttonState == LOW && x == 1 && Armed == true) {
     nosactive = 1; // nos timer einschalten
     x = 0; //Flanken dedektierung zurücksetzen
   }
