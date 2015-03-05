@@ -15,7 +15,6 @@ const int NOSArming =  1;
 // variables will change:
 int keyPress;                  // LCD Button
 int buttonState = LOW; // variable for reading the pushbutton status
-int Arming = HIGH;
 boolean Armed = false;
 int nosactive;
 int x;
@@ -89,9 +88,9 @@ void loop()
 
   buttonState = digitalRead(TransbrakePIN); // abfrage transbrake
   
-  Arming = digitalRead(NOSArming); // abfrage transbrake
+  
 
-if ( Arming == LOW) {Armed = true;} // Arming button abfragen
+ if ( digitalRead(NOSArming) == LOW) {Armed = true;} // Arming button abfragen
 
 
   keyPress = analogRead(0);
