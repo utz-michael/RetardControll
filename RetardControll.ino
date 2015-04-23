@@ -1,5 +1,5 @@
 #include <EEPROM.h>
-#include <SPI.h>
+
 #include <LiquidCrystal.h>
 
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
@@ -34,12 +34,15 @@ int RetardEingang;
 int sensSmoothArray1 [filterSamples];   // array for holding raw sensor values for sensor1
 
 // spi port für wiederstand
-const int csPin = 10;
+const int RET1 = 0;
+const int RET2 = 11;
+const int RET3 = 12;
+const int RET4 = 13;
 
 
 void setup() {
   // initialize the LED pin as an output:
-  Serial.begin(9600);
+ // Serial.begin(9600);
 
   pinMode(RevoPIN, OUTPUT);    // Nos Aktiv
   
@@ -51,16 +54,17 @@ void setup() {
   digitalWrite(NOSArming, HIGH);
   //NOS ausgang ausschalten
   digitalWrite(RevoPIN, LOW);
-  
+  // REtard Relais
+  pinMode(RET1, OUTPUT);
+  pinMode(RET2, OUTPUT);
+  pinMode(RET3, OUTPUT);
+  pinMode(RET4, OUTPUT);
+  digitalWrite(RET1, LOW);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, LOW);
 
-  // SPI Wiederstand setup
-  SPI.begin();
-  SPI.setBitOrder(MSBFIRST); //We know this from the Data Sheet
-
-  pinMode(csPin, OUTPUT);
-  digitalWrite(csPin, HIGH);
-  digitalPotWrite(0, 0); //  Retard sicher ausschalten Wiederstandswert setzen  48.82 Ohm pro einheit
-
+ 
 
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
@@ -78,7 +82,7 @@ void setup() {
 
 
   nosactive = 0; // nos sicher deaktivieren
-  digitalPotWrite(0, 0); //  Retard sicher ausschalten Wiederstandswert setzen  48.82 Ohm pro einheit
+  
 }
 void loop()
 {
@@ -147,7 +151,10 @@ void loop()
 
       if (vDelay > 10000000 ) {
         digitalWrite(RevoPIN, LOW);  // nos dauer
-        digitalPotWrite(0, 0); //  Retard ausschalten Wiederstandswert setzen  48.82 Ohm pro einheit
+        digitalWrite(RET1, LOW);
+        digitalWrite(RET2, LOW);
+        digitalWrite(RET3, LOW);
+        digitalWrite(RET4, LOW);
         nosactive = 0;
       }
 
@@ -171,11 +178,16 @@ void loop()
   }
   else {
     nosactive = 0;
-    digitalPotWrite(0, 0); //  Retard ausschalten Wiederstandswert setzen  48.82 Ohm pro einheit
+   digitalWrite(RET1, LOW);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, LOW);
   }
   nosactive = 0;
-  digitalPotWrite(0, 0); //  Retard ausschalten Wiederstandswert setzen  48.82 Ohm pro einheit
-
+ digitalWrite(RET1, LOW);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, LOW);
 
   // display button abfrage setup routine einschalten ------------------------------------------------
 
@@ -209,9 +221,9 @@ void loop()
         keyPress = analogRead(0);
         // up
         if (keyPress < 221 && keyPress > 66 ) {
-          Retard[i] = Retard[i] + 5;
-          if (Retard[i] >= 200) {
-          Retard[i] = 200;
+          Retard[i] = Retard[i] + 15;
+          if (Retard[i] >= 195) {
+          Retard[i] = 195;
         }
         // Teste entprellen
         do {
@@ -222,11 +234,11 @@ void loop()
 
       // down
       if (keyPress < 395 && keyPress > 230 ) {
-          Retard[i] = Retard[i] - 5;
+          Retard[i] = Retard[i] - 15;
           if (Retard[i] <= 0) {
           Retard[i] = 0;
         }
-        if (Retard[i] >= 200) {
+        if (Retard[i] >= 195) {
           Retard[i] = 0;
         }
         // Teste entprellen
@@ -337,17 +349,7 @@ int digitalSmooth(int rawIn, int *sensSmoothArray) {    // "int *sensSmoothArray
   return total / k;    // divide by number of samples
 }
 
-void digitalPotWrite(int address, int value) {
-  digitalWrite(csPin, LOW); //select slave
-  byte command = 0xB0; //0xB0 = 10110000
-  command += address;
-  SPI.transfer(command);
-  byte byte1 = (value >> 8);
-  byte byte0 = (value & 0xFF); //0xFF = B11111111
-  SPI.transfer(byte1);
-  SPI.transfer(byte0);
-  digitalWrite(csPin, HIGH); //de-select slave
-}
+
 
 void retardFormel() {
 
@@ -373,51 +375,67 @@ if ( 833 <= RetardEingang && RetardEingang <= 899 ) {  i = 13;}
 if ( 900 <= RetardEingang && RetardEingang <= 942 ) {  i = 14;}
 if ( 943 < RetardEingang ) {  i = 15;}
 //Serial.println(i);
-if (i != i_old){
+//if (i != i_old){
 
-if ( Retard[i] == 0 ){ digitalPotWrite(0,0);}
-if ( Retard[i] == 5 ){ digitalPotWrite(0,7);}
-if ( Retard[i] == 10 ){ digitalPotWrite(0,17);}
-if ( Retard[i] == 15 ){digitalPotWrite(0,27 );}
-if ( Retard[i] == 20 ){digitalPotWrite(0,36);}
-if ( Retard[i] == 25 ){ digitalPotWrite(0,46);}
-if ( Retard[i] == 30 ){ digitalPotWrite(0,56);}
-if ( Retard[i] == 35 ){ digitalPotWrite(0,65);}
-if ( Retard[i] == 40 ){ digitalPotWrite(0,75);}
-if ( Retard[i] == 45 ){ digitalPotWrite(0,85);}
-if ( Retard[i] == 50 ){ digitalPotWrite(0,95);}
-if ( Retard[i] == 55 ){ digitalPotWrite(0,106);}
-if ( Retard[i] == 60 ){ digitalPotWrite(0,116);}
-if ( Retard[i] == 65 ){ digitalPotWrite(0,127);}
-if ( Retard[i] == 70 ){ digitalPotWrite(0,137);}
-if ( Retard[i] == 75 ){ digitalPotWrite(0,148);}
-if ( Retard[i] == 80 ){ digitalPotWrite(0,160);}
-if ( Retard[i] == 85 ){ digitalPotWrite(0,170);}
-if ( Retard[i] == 90 ){ digitalPotWrite(0,181);}
-if ( Retard[i] == 95 ){ digitalPotWrite(0,193);}
-if ( Retard[i] == 100 ){ digitalPotWrite(0,205);}
-if ( Retard[i] == 105 ){ digitalPotWrite(0,217);}
-if ( Retard[i] == 110 ){ digitalPotWrite(0,229);}
-if ( Retard[i] == 115 ){ digitalPotWrite(0,241);}
-if ( Retard[i] == 120 ){ digitalPotWrite(0,253);}
-if ( Retard[i] == 125 ){ digitalPotWrite(0,266);}
-if ( Retard[i] == 130 ){ digitalPotWrite(0,279);}
-if ( Retard[i] == 135 ){ digitalPotWrite(0,292);}
-if ( Retard[i] == 140 ){ digitalPotWrite(0,305);}
-if ( Retard[i] == 145 ){ digitalPotWrite(0,318);}
-if ( Retard[i] == 150 ){ digitalPotWrite(0,331);}
-if ( Retard[i] == 155 ){ digitalPotWrite(0,345);}
-if ( Retard[i] == 160 ){ digitalPotWrite(0,359);}
-if ( Retard[i] == 165 ){ digitalPotWrite(0,373);}
-if ( Retard[i] == 170 ){ digitalPotWrite(0,387);}
-if ( Retard[i] == 175 ){ digitalPotWrite(0,403);}
-if ( Retard[i] == 180 ){ digitalPotWrite(0,418);}
-if ( Retard[i] == 185 ){ digitalPotWrite(0,433);}
-if ( Retard[i] == 190 ){ digitalPotWrite(0,449);}
-if ( Retard[i] == 195 ){ digitalPotWrite(0,464);}
-if ( Retard[i] == 200 ){ digitalPotWrite(0,480);}
-}
-i_old = i;
+if ( Retard[i] == 0 ){ digitalWrite(RET1, LOW);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, LOW);}
+if ( Retard[i] == 15 ){digitalWrite(RET1, HIGH);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, LOW);}
+if ( Retard[i] == 30 ){ digitalWrite(RET1, LOW);
+  digitalWrite(RET2, HIGH);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, LOW);}
+if ( Retard[i] == 45 ){digitalWrite(RET1, HIGH);
+  digitalWrite(RET2, HIGH);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, LOW);}
+if ( Retard[i] == 60 ){digitalWrite(RET1, LOW);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, HIGH);
+  digitalWrite(RET4, LOW);}
+if ( Retard[i] == 75 ){ digitalWrite(RET1, HIGH);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, HIGH);
+  digitalWrite(RET4, LOW);}
+if ( Retard[i] == 90 ){ digitalWrite(RET1, LOW);
+  digitalWrite(RET2, HIGH);
+  digitalWrite(RET3, HIGH);
+  digitalWrite(RET4, LOW);}
+if ( Retard[i] == 105 ){ digitalWrite(RET1, HIGH);
+  digitalWrite(RET2, HIGH);
+  digitalWrite(RET3, HIGH);
+  digitalWrite(RET4, LOW);}
+if ( Retard[i] == 120 ){ digitalWrite(RET1, LOW);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, HIGH);}
+if ( Retard[i] == 135){ digitalWrite(RET1, HIGH);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, HIGH);}
+if ( Retard[i] == 150 ){ digitalWrite(RET1, LOW);
+  digitalWrite(RET2, HIGH);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, HIGH);}
+if ( Retard[i] == 165 ){ digitalWrite(RET1, HIGH);
+  digitalWrite(RET2, HIGH);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, HIGH);}
+if ( Retard[i] == 180 ){ digitalWrite(RET1, LOW);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, HIGH);
+  digitalWrite(RET4, HIGH);}
+if ( Retard[i] == 195 ){ digitalWrite(RET1, HIGH);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, HIGH);
+  digitalWrite(RET4, HIGH);}
+
+//}
+//i_old = i;
   return;
   //-------------------------------------------------------------------------------------------------
 }
