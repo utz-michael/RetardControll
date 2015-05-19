@@ -10,12 +10,12 @@ const int TransbrakePIN = 2;     // the number of the pushbutton pin Transbrake 
 
 const int RevoPIN =  3;      // the number of the LED pin NOS
 
-const int NOSArming =  1;
+
 
 // variables will change:
 int keyPress;                  // LCD Button
 int buttonState = LOW; // variable for reading the pushbutton status
-boolean Armed = false;
+
 int nosactive;
 int x;
 int i;
@@ -50,8 +50,7 @@ void setup() {
 
   // initialize the pushbutton pin as an input:
   pinMode(TransbrakePIN, INPUT);     //transbrake
-  pinMode(NOSArming, INPUT);     //Arming switch
-  digitalWrite(NOSArming, HIGH);
+ 
   //NOS ausgang ausschalten
   digitalWrite(RevoPIN, LOW);
   // REtard Relais
@@ -94,7 +93,7 @@ void loop()
   
   
 
- if ( digitalRead(NOSArming) == LOW) {Armed = true;} // Arming button abfragen
+
 
 
   keyPress = analogRead(0);
@@ -114,14 +113,14 @@ void loop()
 
 
   // Abfrage der steigenden flanke des Transbrake Buttons
-  if (buttonState == HIGH && x == 0 && Armed == true) {
+  if (buttonState == HIGH && x == 0 ) {
     delay (1000);
     x = 1; // steigende Flanke dedektiert
     nosactive = 0; // nos timer sicher ausgeschaltet
   }
 
   // Abfrage der fallenden Flanke des Transbrake Buttons
-  if (buttonState == LOW && x == 1 && Armed == true) {
+  if (buttonState == LOW && x == 1 ) {
     nosactive = 1; // nos timer einschalten
     x = 0; //Flanken dedektierung zurücksetzen
   }
@@ -149,7 +148,7 @@ void loop()
       mDelay = micros();           // MicrosekundenzÃ¤hler auslesen
       vDelay = mDelay - lastDelay;  // Differenz zum letzten Durchlauf berechnen
 
-      if (vDelay > 10000000 ) {
+      if (vDelay > 12000000 ) {
         digitalWrite(RevoPIN, LOW);  // nos dauer
         digitalWrite(RET1, LOW);
         digitalWrite(RET2, LOW);
