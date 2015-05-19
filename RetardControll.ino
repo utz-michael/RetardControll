@@ -30,7 +30,7 @@ int Retard[16];
 
 int RetardEingang;
 
-#define filterSamples   9              // filterSamples should  be an odd number, no smaller than 3
+#define filterSamples   3              // filterSamples should  be an odd number, no smaller than 3
 int sensSmoothArray1 [filterSamples];   // array for holding raw sensor values for sensor1
 
 // spi port für wiederstand
