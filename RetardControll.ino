@@ -1,7 +1,7 @@
 #include <EEPROM.h>
 
 #include <LiquidCrystal.h>
-
+#define DEBUG   //Debug einschalten verlangsammt 110ms
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
 // constants won't change. They're used here to
@@ -23,7 +23,7 @@ int i_old;
 unsigned long lastDelay = 0;
 unsigned long mDelay;
 unsigned long vDelay;
-
+unsigned long laufzeit;
 char* Leistung[] = {"0 - 5%", "6 - 11%", "12 - 18%","19 - 24%", "25 - 30%", "31 - 36%", "37 - 42", "43 - 49%", "50 - 55%","56 - 61%","62 - 67%","68 - 73%","74 - 80%","81 - 86%","87 - 92%","93 - 100%"};
 
 int Retard[16];
@@ -34,7 +34,8 @@ int RetardEingang;
 int sensSmoothArray1 [filterSamples];   // array for holding raw sensor values for sensor1
 
 // spi port für wiederstand
-const int RET1 = 0;
+const int RET1 = 10;
+
 const int RET2 = 11;
 const int RET3 = 12;
 const int RET4 = 13;
@@ -42,11 +43,30 @@ const int RET4 = 13;
 
 void setup() {
   // initialize the LED pin as an output:
- // Serial.begin(9600);
-
+ laufzeit=12000000 ; 
+ readmem (); // eeprom lesen
   pinMode(RevoPIN, OUTPUT);    // Nos Aktiv
-  
-
+#ifdef DEBUG  
+Serial.begin(9600);
+laufzeit=120000000 ; 
+Retard[0]=0;
+Retard[1]=0;
+Retard[2]=0;
+Retard[3]=15;
+Retard[4]=30;
+Retard[5]=45;
+Retard[6]=60;
+Retard[7]=75;
+Retard[8]=90;
+Retard[9]=105;
+Retard[10]=120;
+Retard[11]=135;
+Retard[12]=150;
+Retard[13]=165;
+Retard[14]=180;
+Retard[15]=195;
+ writemem ();
+#endif
 
   // initialize the pushbutton pin as an input:
   pinMode(TransbrakePIN, INPUT);     //transbrake
@@ -75,7 +95,7 @@ void setup() {
 
 
 
-  readmem (); // eeprom lesen
+ 
 
   lcd.setCursor(0, 0);
 
@@ -148,7 +168,7 @@ void loop()
       mDelay = micros();           // MicrosekundenzÃ¤hler auslesen
       vDelay = mDelay - lastDelay;  // Differenz zum letzten Durchlauf berechnen
 
-      if (vDelay > 12000000 ) {
+      if (vDelay > laufzeit ) {
         digitalWrite(RevoPIN, LOW);  // nos dauer
         digitalWrite(RET1, LOW);
         digitalWrite(RET2, LOW);
@@ -356,7 +376,8 @@ void retardFormel() {
 
   RetardEingang = digitalSmooth(analogRead(5), sensSmoothArray1) ; // einlesen und Filtern der Analogen Spannung vom REVO Controller
   //----- Berechnung des Wiederstandes und des Retards------------------------------------------------
-//Serial.println(RetardEingang);
+
+
 if ( RetardEingang <= 32 ) { i = 0;}
 if ( 33 <= RetardEingang && RetardEingang <= 97 ) {  i = 1;}
 if ( 98 <= RetardEingang && RetardEingang <= 164 ) {  i = 2;}
@@ -373,7 +394,7 @@ if ( 765 <= RetardEingang && RetardEingang <= 832 ) {  i = 12;}
 if ( 833 <= RetardEingang && RetardEingang <= 899 ) {  i = 13;}
 if ( 900 <= RetardEingang && RetardEingang <= 942 ) {  i = 14;}
 if ( 943 < RetardEingang ) {  i = 15;}
-//Serial.println(i);
+
 //if (i != i_old){
 
 if ( Retard[i] == 0 ){ digitalWrite(RET1, LOW);
@@ -435,6 +456,21 @@ if ( Retard[i] == 195 ){ digitalWrite(RET1, HIGH);
 
 //}
 //i_old = i;
+#ifdef DEBUG  
+Serial.print("Spannung: ");
+Serial.print(RetardEingang*0.0049);
+Serial.print(" i: ");
+Serial.print(i);
+Serial.print(" Retard1: ");
+Serial.print(digitalRead(RET1));
+Serial.print(" Retard2: ");
+Serial.print(digitalRead(RET2));
+Serial.print(" Retard3: ");
+Serial.print(digitalRead(RET3));
+Serial.print(" Retard4: ");
+Serial.println(digitalRead(RET4));
+//delay(300);
+#endif
   return;
   //-------------------------------------------------------------------------------------------------
 }
