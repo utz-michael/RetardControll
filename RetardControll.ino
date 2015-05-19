@@ -48,7 +48,7 @@ void setup() {
   pinMode(RevoPIN, OUTPUT);    // Nos Aktiv
 #ifdef DEBUG  
 Serial.begin(9600);
-laufzeit=120000000 ; 
+laufzeit=1200000000 ; 
 Retard[0]=0;
 Retard[1]=0;
 Retard[2]=0;
