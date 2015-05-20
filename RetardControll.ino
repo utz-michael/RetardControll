@@ -1,11 +1,8 @@
 #include <EEPROM.h>
-
 #include <LiquidCrystal.h>
 #define DEBUG   //Debug einschalten verlangsammt 110ms
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
-// constants won't change. They're used here to
-// set pin numbers:
 const int TransbrakePIN = 2;     // the number of the pushbutton pin Transbrake Button
 
 const int RevoPIN =  3;      // the number of the LED pin NOS
@@ -19,7 +16,7 @@ int buttonState = LOW; // variable for reading the pushbutton status
 int nosactive;
 int x;
 int i;
-int i_old;
+//int i_old;
 unsigned long lastDelay = 0;
 unsigned long mDelay;
 unsigned long vDelay;
@@ -35,7 +32,6 @@ int sensSmoothArray1 [filterSamples];   // array for holding raw sensor values f
 
 // spi port für wiederstand
 const int RET1 = 10;
-
 const int RET2 = 11;
 const int RET3 = 12;
 const int RET4 = 13;
@@ -105,26 +101,7 @@ Retard[15]=195;
 }
 void loop()
 {
-
-
- // keyPress = analogRead(0);
-
-  buttonState = digitalRead(TransbrakePIN); // abfrage transbrake
-  
-  
-
-
-
-
- // keyPress = analogRead(0);
-  
-  
-  /*if (keyPress < 600 && keyPress > 400 ) {
-    nosactive = 1;
-  }
-*/
-
-
+ 
   buttonState = digitalRead(TransbrakePIN); // abfrage ob transbrake gedrückt
    if ( buttonState == HIGH ) {
     lcd.setCursor(0, 0);
@@ -132,10 +109,6 @@ void loop()
     lcd.setCursor(0, 1);
     lcd.print("     active     ");
   }
-
-
-
-
   // Abfrage der steigenden flanke des Transbrake Buttons
   if (buttonState == HIGH && x == 0 ) {
     delay (1000);
@@ -148,7 +121,6 @@ void loop()
     nosactive = 1; // nos timer einschalten
     x = 0; //Flanken dedektierung zurücksetzen
   }
-
 
   //nos starten ------------------------------------------------------------------------------------------------------------------------------------------------
   if (nosactive == 1) {
@@ -163,12 +135,6 @@ void loop()
     
     do {
       digitalWrite(RevoPIN, HIGH);
-
-
-
-
-
-
       mDelay = micros();           // MicrosekundenzÃ¤hler auslesen
       vDelay = mDelay - lastDelay;  // Differenz zum letzten Durchlauf berechnen
 
@@ -180,11 +146,6 @@ void loop()
         digitalWrite(RET4, LOW);
         nosactive = 0;
       }
-
-
-
-
-
       //---------------------------------------------------------------------
 
       retardFormel ();
@@ -192,6 +153,7 @@ void loop()
       //-------------------------------------------------------------------
     }
     while (nosactive == 1);
+    
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Nitrous Oxide   ");
@@ -399,8 +361,6 @@ if ( 833 <= RetardEingang && RetardEingang <= 899 ) {  i = 13;}
 if ( 900 <= RetardEingang && RetardEingang <= 942 ) {  i = 14;}
 if ( 943 < RetardEingang ) {  i = 15;}
 
-//if (i != i_old){
-
 if ( Retard[i] == 0 ){ digitalWrite(RET1, LOW);
   digitalWrite(RET2, LOW);
   digitalWrite(RET3, LOW);
@@ -458,8 +418,7 @@ if ( Retard[i] == 195 ){ digitalWrite(RET1, HIGH);
   digitalWrite(RET3, HIGH);
   digitalWrite(RET4, HIGH);}
 
-//}
-//i_old = i;
+
 #ifdef DEBUG  
 Serial.print("Spannung: ");
 Serial.print(RetardEingang*0.0049);
@@ -473,7 +432,7 @@ Serial.print(" Retard3: ");
 Serial.print(digitalRead(RET3));
 Serial.print(" Retard4: ");
 Serial.println(digitalRead(RET4));
-//delay(300);
+
 #endif
   return;
   //-------------------------------------------------------------------------------------------------
