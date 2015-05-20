@@ -107,7 +107,7 @@ void loop()
 {
 
 
-  keyPress = analogRead(0);
+ // keyPress = analogRead(0);
 
   buttonState = digitalRead(TransbrakePIN); // abfrage transbrake
   
@@ -116,10 +116,14 @@ void loop()
 
 
 
-  keyPress = analogRead(0);
-  if (keyPress < 600 && keyPress > 400 ) {
+ // keyPress = analogRead(0);
+  
+  
+  /*if (keyPress < 600 && keyPress > 400 ) {
     nosactive = 1;
   }
+*/
+
 
   buttonState = digitalRead(TransbrakePIN); // abfrage ob transbrake gedrückt
    if ( buttonState == HIGH ) {
