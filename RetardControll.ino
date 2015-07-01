@@ -1,6 +1,6 @@
 #include <EEPROM.h>
 #include <LiquidCrystal.h>
-#define DEBUG   //Debug einschalten verlangsammt 110ms
+//#define DEBUG   //Debug einschalten verlangsammt 110ms
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
 const int TransbrakePIN = 2;     // the number of the pushbutton pin Transbrake Button
