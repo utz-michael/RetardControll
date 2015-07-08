@@ -79,6 +79,8 @@ Retard[15]=195;
   digitalWrite(RET3, LOW);
   digitalWrite(RET4, LOW);
 
+  
+ 
  
 
   // set up the LCD's number of columns and rows:
@@ -173,6 +175,7 @@ void loop()
   digitalWrite(RET2, LOW);
   digitalWrite(RET3, LOW);
   digitalWrite(RET4, LOW);
+ 
 
   // display button abfrage setup routine einschalten ------------------------------------------------
 
