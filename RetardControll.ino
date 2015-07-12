@@ -1,9 +1,5 @@
 
-//#define DEBUG   //Debug einschalten verlangsammt 110ms
-
-
 const int TransbrakePIN = 2;     // the number of the pushbutton pin Transbrake Button
-
 const int RevoPIN =  3;      // the number of the LED pin NOS
 
 
@@ -26,7 +22,7 @@ int Retard[16];
 
 int RetardEingang;
 
-#define filterSamples   3              // filterSamples should  be an odd number, no smaller than 3
+#define filterSamples   9              // filterSamples should  be an odd number, no smaller than 3
 int sensSmoothArray1 [filterSamples];   // array for holding raw sensor values for sensor1
 
 // spi port für wiederstand
