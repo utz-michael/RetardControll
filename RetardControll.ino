@@ -1,7 +1,6 @@
-#include <EEPROM.h>
-#include <LiquidCrystal.h>
+
 //#define DEBUG   //Debug einschalten verlangsammt 110ms
-LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
+
 
 const int TransbrakePIN = 2;     // the number of the pushbutton pin Transbrake Button
 
@@ -21,7 +20,7 @@ unsigned long lastDelay = 0;
 unsigned long mDelay;
 unsigned long vDelay;
 unsigned long laufzeit;
-char* Leistung[] = {"0 - 5%", "6 - 11%", "12 - 18%","19 - 24%", "25 - 30%", "31 - 36%", "37 - 42", "43 - 49%", "50 - 55%","56 - 61%","62 - 67%","68 - 73%","74 - 80%","81 - 86%","87 - 92%","93 - 100%"};
+
 
 int Retard[16];
 
@@ -39,30 +38,29 @@ const int RET4 = 13;
 
 void setup() {
   // initialize the LED pin as an output:
- laufzeit=12000000 ; 
- readmem (); // eeprom lesen
+ laufzeit=11000000 ; 
+ 
   pinMode(RevoPIN, OUTPUT);    // Nos Aktiv
-#ifdef DEBUG  
-Serial.begin(9600);
-laufzeit=1200000000 ; 
+ 
+
 Retard[0]=0;
 Retard[1]=0;
 Retard[2]=0;
-Retard[3]=15;
-Retard[4]=30;
-Retard[5]=45;
-Retard[6]=60;
-Retard[7]=75;
-Retard[8]=90;
-Retard[9]=105;
-Retard[10]=120;
-Retard[11]=135;
-Retard[12]=150;
-Retard[13]=165;
-Retard[14]=180;
-Retard[15]=195;
- writemem ();
-#endif
+Retard[3]=0;
+Retard[4]=15;
+Retard[5]=30;
+Retard[6]=45;
+Retard[7]=60;
+Retard[8]=75;
+Retard[9]=90;
+Retard[10]=105;
+Retard[11]=120;
+Retard[12]=135;
+Retard[13]=150;
+Retard[14]=165;
+Retard[15]=180;
+
+
 
   // initialize the pushbutton pin as an input:
   pinMode(TransbrakePIN, INPUT_PULLUP);     //transbrake
@@ -79,24 +77,6 @@ Retard[15]=195;
   digitalWrite(RET3, LOW);
   digitalWrite(RET4, LOW);
 
-  
- 
- 
-
-  // set up the LCD's number of columns and rows:
-  lcd.begin(16, 2);
-  lcd.setCursor(0, 0);
-  lcd.print("     Retard     ");
-  lcd.setCursor(0, 1);
-  lcd.print("   Controller   ");
-  //delay(5000);
-
-
-
- 
-
-  lcd.setCursor(0, 0);
-
 
   nosactive = 0; // nos sicher deaktivieren
   
@@ -106,10 +86,7 @@ void loop()
  
   buttonState = digitalRead(TransbrakePIN); // abfrage ob transbrake gedrückt
    if ( buttonState == LOW ) {
-    lcd.setCursor(0, 0);
-    lcd.print("   Transbrake   ");
-    lcd.setCursor(0, 1);
-    lcd.print("     active     ");
+    
   }
   // Abfrage der steigenden flanke des Transbrake Buttons
   if (buttonState == LOW && x == 0 ) {
@@ -129,11 +106,7 @@ void loop()
     mDelay = micros(); // zeit speichern am anfang der warteschleife
     lastDelay = mDelay;
 
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Nitrous Oxide   ");
-    lcd.setCursor(0, 1);
-    lcd.print("     on        ");
+    
     
     do {
       digitalWrite(RevoPIN, HIGH);
@@ -156,11 +129,7 @@ void loop()
     }
     while (nosactive == 1);
     
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("Nitrous Oxide   ");
-    lcd.setCursor(0, 1);
-    lcd.print("     off       ");
+   
     
   }
   else {
@@ -179,107 +148,14 @@ void loop()
 
   // display button abfrage setup routine einschalten ------------------------------------------------
 
-  keyPress = analogRead(0);
-
-
-  if (keyPress < 873 && keyPress > 603) {
-
-
-
-    do {
-      keyPress = analogRead(0);
-    } while (keyPress < 900 );
-    lcd.clear();
-
-
-    for (int i = 0; i <= 15; i++) {
-
-      // Leistung   ------------------------------------------------------------------------------------
-      do
-      {
-        lcd.setCursor(0, 0);
-        lcd.print("Revo %");
-        lcd.setCursor(7, 0);
-        lcd.print(Leistung[i]);
-        lcd.setCursor(0, 1);
-        lcd.print("Retard");
-        lcd.setCursor(7, 1);
-        lcd.print(Retard[i]/10.0);
-
-        keyPress = analogRead(0);
-        // up
-        if (keyPress < 221 && keyPress > 66 ) {
-          Retard[i] = Retard[i] + 15;
-          if (Retard[i] >= 195) {
-          Retard[i] = 195;
-        }
-        // Teste entprellen
-        do {
-          keyPress = analogRead(0);
-          } while (keyPress < 900 );
-          //------------------------------
-        }
-
-      // down
-      if (keyPress < 395 && keyPress > 230 ) {
-          Retard[i] = Retard[i] - 15;
-          if (Retard[i] <= 0) {
-          Retard[i] = 0;
-        }
-        if (Retard[i] >= 195) {
-          Retard[i] = 0;
-        }
-        // Teste entprellen
-        do {
-          keyPress = analogRead(0);
-          } while (keyPress < 900 );
-          //------------------------------
-        }
-
-
-
-    } while (keyPress > 50 ); // rechte taste abfragen
-      // Teste entprellen
-      do {
-        keyPress = analogRead(0);
-      } while (keyPress < 900 );
-
-      //------------------------------
-
-    }
-    lcd.clear();
-    lcd.setCursor(0, 0);
-  lcd.print("     Retard     ");
-  lcd.setCursor(0, 1);
-  lcd.print("   Controller   ");
-    writemem ();   // daten speichern
+ 
 
 
   }
 
 
-}
-void writemem () {
-  for (int i = 0; i <= 15; i++) {
-  
-  byte firstByte = byte(Retard[i] >> 8);
-  byte secondByte = byte(Retard[i] & 0x00FF);
-  
-  EEPROM.write(i, firstByte);
-  EEPROM.write(i+20, secondByte);
-}
-  return;
-}
 
-void readmem () {
-  for (int i = 0; i <= 15; i++) {
-    byte  firstByte = EEPROM.read(i);
-    byte  secondByte = EEPROM.read(i+20);
-  Retard[i] = int(firstByte << 8) + int(secondByte);
-  
-}
-  return;
-}
+
 
 int digitalSmooth(int rawIn, int *sensSmoothArray) {    // "int *sensSmoothArray" passes an array to the function - the asterisk indicates the array name is a pointer
   int j, k, temp, top, bottom;
@@ -422,21 +298,6 @@ if ( Retard[i] == 195 ){ digitalWrite(RET1, HIGH);
   digitalWrite(RET4, HIGH);}
 
 
-#ifdef DEBUG  
-Serial.print("Spannung: ");
-Serial.print(RetardEingang*0.0049);
-Serial.print(" i: ");
-Serial.print(i);
-Serial.print(" Retard1: ");
-Serial.print(digitalRead(RET1));
-Serial.print(" Retard2: ");
-Serial.print(digitalRead(RET2));
-Serial.print(" Retard3: ");
-Serial.print(digitalRead(RET3));
-Serial.print(" Retard4: ");
-Serial.println(digitalRead(RET4));
-
-#endif
   return;
   //-------------------------------------------------------------------------------------------------
 }
