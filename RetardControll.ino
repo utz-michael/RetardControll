@@ -65,7 +65,7 @@ Retard[15]=195;
 #endif
 
   // initialize the pushbutton pin as an input:
-  pinMode(TransbrakePIN, INPUT);     //transbrake
+  pinMode(TransbrakePIN, INPUT_PULLUP);     //transbrake
  
   //NOS ausgang ausschalten
   digitalWrite(RevoPIN, LOW);
@@ -105,21 +105,21 @@ void loop()
 {
  
   buttonState = digitalRead(TransbrakePIN); // abfrage ob transbrake gedrückt
-   if ( buttonState == HIGH ) {
+   if ( buttonState == LOW ) {
     lcd.setCursor(0, 0);
     lcd.print("   Transbrake   ");
     lcd.setCursor(0, 1);
     lcd.print("     active     ");
   }
   // Abfrage der steigenden flanke des Transbrake Buttons
-  if (buttonState == HIGH && x == 0 ) {
-    delay (1000);
+  if (buttonState == LOW && x == 0 ) {
+    delay (500);
     x = 1; // steigende Flanke dedektiert
     nosactive = 0; // nos timer sicher ausgeschaltet
   }
 
   // Abfrage der fallenden Flanke des Transbrake Buttons
-  if (buttonState == LOW && x == 1 ) {
+  if (buttonState == HIGH && x == 1 ) {
     nosactive = 1; // nos timer einschalten
     x = 0; //Flanken dedektierung zurücksetzen
   }
