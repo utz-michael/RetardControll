@@ -2,11 +2,7 @@
 const int TransbrakePIN = 2;     // the number of the pushbutton pin Transbrake Button
 const int RevoPIN =  3;      // the number of the LED pin NOS
 
-
-
-// variables will change:
-int keyPress;                  // LCD Button
-int buttonState = LOW; // variable for reading the pushbutton status
+int buttonState = HIGH; // variable for reading the pushbutton status
 
 int nosactive;
 int x;
@@ -19,7 +15,6 @@ unsigned long laufzeit;
 
 
 int Retard[16];
-
 int RetardEingang;
 
 #define filterSamples   9              // filterSamples should  be an odd number, no smaller than 3
@@ -109,8 +104,8 @@ void loop()
       mDelay = micros();           // MicrosekundenzÃ¤hler auslesen
       vDelay = mDelay - lastDelay;  // Differenz zum letzten Durchlauf berechnen
 
-      if (vDelay > laufzeit ) {
-        digitalWrite(RevoPIN, LOW);  // nos dauer
+      if (vDelay >= laufzeit ) {
+        digitalWrite(RevoPIN, LOW);  
         digitalWrite(RET1, LOW);
         digitalWrite(RET2, LOW);
         digitalWrite(RET3, LOW);
@@ -130,23 +125,16 @@ void loop()
   }
   else {
     nosactive = 0;
-   digitalWrite(RET1, LOW);
+  digitalWrite(RET1, LOW);
   digitalWrite(RET2, LOW);
   digitalWrite(RET3, LOW);
   digitalWrite(RET4, LOW);
   }
   nosactive = 0;
- digitalWrite(RET1, LOW);
+  digitalWrite(RET1, LOW);
   digitalWrite(RET2, LOW);
   digitalWrite(RET3, LOW);
   digitalWrite(RET4, LOW);
- 
-
-  // display button abfrage setup routine einschalten ------------------------------------------------
-
- 
-
-
   }
 
 
@@ -182,15 +170,6 @@ int digitalSmooth(int rawIn, int *sensSmoothArray) {    // "int *sensSmoothArray
       }
     }
   }
-
-  /*
-    for (j = 0; j < (filterSamples); j++){    // print the array to debug
-      Serial.print(sorted[j]);
-      Serial.print("   ");
-    }
-    Serial.println();
-  */
-
   // throw out top and bottom 15% of samples - limit to throw out at least one from top and bottom
   bottom = max(((filterSamples * 15)  / 100), 1);
   top = min((((filterSamples * 85) / 100) + 1  ), (filterSamples - 1));   // the + 1 is to make up for asymmetry caused by integer rounding
@@ -199,13 +178,7 @@ int digitalSmooth(int rawIn, int *sensSmoothArray) {    // "int *sensSmoothArray
   for ( j = bottom; j < top; j++) {
     total += sorted[j];  // total remaining indices
     k++;
-    // Serial.print(sorted[j]);
-    // Serial.print("   ");
   }
-
-  //  Serial.println();
-  //  Serial.print("average = ");
-  //  Serial.println(total/k);
   return total / k;    // divide by number of samples
 }
 
