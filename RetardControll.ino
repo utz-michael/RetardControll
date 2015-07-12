@@ -76,9 +76,7 @@ void loop()
 {
  
   buttonState = digitalRead(TransbrakePIN); // abfrage ob transbrake gedrückt
-   if ( buttonState == LOW ) {
-    
-  }
+   
   // Abfrage der steigenden flanke des Transbrake Buttons
   if (buttonState == LOW && x == 0 ) {
     delay (500);
@@ -179,6 +177,7 @@ int digitalSmooth(int rawIn, int *sensSmoothArray) {    // "int *sensSmoothArray
     total += sorted[j];  // total remaining indices
     k++;
   }
+  
   return total / k;    // divide by number of samples
 }
 
