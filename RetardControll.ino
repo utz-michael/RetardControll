@@ -1,10 +1,11 @@
-/*
+
 const int TransbrakePIN = 53;     // the number of the pushbutton pin Transbrake Button
 const int RevoPIN =  51;      // the number of the LED pin NOS
-*/
+
+/*
 const int TransbrakePIN = 2;     // the number of the pushbutton pin Transbrake Button
 const int RevoPIN =  3;      // the number of the LED pin NOS
-
+*/
 
 int buttonState = HIGH; // variable for reading the pushbutton status
 
@@ -25,18 +26,18 @@ int RetardEingang;
 int sensSmoothArray1 [filterSamples];   // array for holding raw sensor values for sensor1
 
 // spi port für wiederstand
-
+/*
 const int RET1 = 10;
 const int RET2 = 11;
 const int RET3 = 12;
 const int RET4 = 13;
+*/
 
-/*
 const int RET1 = 49;
 const int RET2 = 47;
 const int RET3 = 45;
 const int RET4 = 43;
-*/
+
 void setup() {
   
  
