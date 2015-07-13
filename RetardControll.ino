@@ -1,6 +1,10 @@
-
+/*
 const int TransbrakePIN = 53;     // the number of the pushbutton pin Transbrake Button
 const int RevoPIN =  51;      // the number of the LED pin NOS
+*/
+const int TransbrakePIN = 2;     // the number of the pushbutton pin Transbrake Button
+const int RevoPIN =  3;      // the number of the LED pin NOS
+
 
 int buttonState = HIGH; // variable for reading the pushbutton status
 
@@ -13,7 +17,7 @@ unsigned long mDelay;
 unsigned long vDelay;
 unsigned long laufzeit;
 
-
+unsigned long sicherheit = 0;
 int Retard[16];
 int RetardEingang;
 
@@ -21,20 +25,24 @@ int RetardEingang;
 int sensSmoothArray1 [filterSamples];   // array for holding raw sensor values for sensor1
 
 // spi port für wiederstand
-/*
+
 const int RET1 = 10;
 const int RET2 = 11;
 const int RET3 = 12;
 const int RET4 = 13;
-*/
+
+/*
 const int RET1 = 49;
 const int RET2 = 47;
 const int RET3 = 45;
 const int RET4 = 43;
-
+*/
 void setup() {
+  
+ 
+  
   // initialize the LED pin as an output:
- laufzeit=11000000 ; 
+ laufzeit=9000000 ; 
  
   pinMode(RevoPIN, OUTPUT);    // Nos Aktiv
  
@@ -83,17 +91,21 @@ void loop()
   buttonState = digitalRead(TransbrakePIN); // abfrage ob transbrake gedrückt
    
   // Abfrage der steigenden flanke des Transbrake Buttons
-  if (buttonState == LOW && x == 0 ) {
-    delay (500);
+  if (buttonState == LOW  ) {
+    sicherheit++;
     x = 1; // steigende Flanke dedektiert
-    nosactive = 0; // nos timer sicher ausgeschaltet
+    //nosactive = 0; // nos timer sicher ausgeschaltet
+    
   }
 
   // Abfrage der fallenden Flanke des Transbrake Buttons
-  if (buttonState == HIGH && x == 1 ) {
+  if (buttonState == HIGH && x == 1 && sicherheit >= 4000) {
+    
     nosactive = 1; // nos timer einschalten
     x = 0; //Flanken dedektierung zurücksetzen
+    sicherheit = 0;
   }
+  
 
   //nos starten ------------------------------------------------------------------------------------------------------------------------------------------------
   if (nosactive == 1) {
