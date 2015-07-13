@@ -1,6 +1,6 @@
 
-const int TransbrakePIN = 2;     // the number of the pushbutton pin Transbrake Button
-const int RevoPIN =  3;      // the number of the LED pin NOS
+const int TransbrakePIN = 53;     // the number of the pushbutton pin Transbrake Button
+const int RevoPIN =  51;      // the number of the LED pin NOS
 
 int buttonState = HIGH; // variable for reading the pushbutton status
 
@@ -21,11 +21,16 @@ int RetardEingang;
 int sensSmoothArray1 [filterSamples];   // array for holding raw sensor values for sensor1
 
 // spi port für wiederstand
+/*
 const int RET1 = 10;
 const int RET2 = 11;
 const int RET3 = 12;
 const int RET4 = 13;
-
+*/
+const int RET1 = 49;
+const int RET2 = 47;
+const int RET3 = 45;
+const int RET4 = 43;
 
 void setup() {
   // initialize the LED pin as an output:
@@ -187,9 +192,8 @@ void retardFormel() {
 
   // Retart steuerung
 
-  RetardEingang = digitalSmooth(analogRead(5), sensSmoothArray1) ; // einlesen und Filtern der Analogen Spannung vom REVO Controller
+  RetardEingang = digitalSmooth(analogRead(0), sensSmoothArray1) ; // einlesen und Filtern der Analogen Spannung vom REVO Controller
   //----- Berechnung des Wiederstandes und des Retards------------------------------------------------
-
 
 if ( RetardEingang <= 32 ) { i = 0;}
 if ( 33 <= RetardEingang && RetardEingang <= 97 ) {  i = 1;}
