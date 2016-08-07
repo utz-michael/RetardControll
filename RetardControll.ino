@@ -211,7 +211,7 @@ if ( 501 <= RetardEingang && RetardEingang <= 565 ) {
   digitalWrite(RET2, LOW);
   digitalWrite(RET3, HIGH);
   digitalWrite(RET4, LOW);} // 50 - 55 % Revo 2,61 V 350 - 390 PS
-if ( 566 <= RetardEingang && RetardEingang <= 764 ) {
+if ( 566 <= RetardEingang && RetardEingang <= 1023 ) {
   digitalWrite(RET1, LOW);
   digitalWrite(RET2, LOW);
   digitalWrite(RET3, LOW);
