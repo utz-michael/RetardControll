@@ -11,7 +11,7 @@ int buttonState = HIGH; // variable for reading the pushbutton status
 
 int nosactive;
 int x;
-int i;
+//int i;
 //int i_old;
 unsigned long lastDelay = 0;
 unsigned long mDelay;
@@ -19,7 +19,7 @@ unsigned long vDelay;
 unsigned long laufzeit;
 
 unsigned long sicherheit = 0;
-int Retard[16];
+
 int RetardEingang;
 
 #define filterSamples   9              // filterSamples should  be an odd number, no smaller than 3
@@ -46,24 +46,6 @@ void setup() {
  laufzeit=9000000 ; 
  
   pinMode(RevoPIN, OUTPUT);    // Nos Aktiv
- 
-
-Retard[0]=0;
-Retard[1]=0;
-Retard[2]=0;
-Retard[3]=0;
-Retard[4]=15;
-Retard[5]=30;
-Retard[6]=45;
-Retard[7]=60;
-Retard[8]=75;
-Retard[9]=90;
-Retard[10]=105;
-Retard[11]=120;
-Retard[12]=135;
-Retard[13]=150;
-Retard[14]=165;
-Retard[15]=180;
 
 
 
@@ -208,6 +190,37 @@ void retardFormel() {
   RetardEingang = digitalSmooth(analogRead(0), sensSmoothArray1) ; // einlesen und Filtern der Analogen Spannung vom REVO Controller
   //----- Berechnung des Wiederstandes und des Retards------------------------------------------------
 
+
+if ( RetardEingang <= 366 ) { 
+  digitalWrite(RET1, LOW);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, LOW);}
+if ( 367 <= RetardEingang && RetardEingang <= 433 ) {
+  digitalWrite(RET1, HIGH);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, LOW);} // 37 - 42 % revo 1,96 V 230 - 275 PS
+if ( 434 <= RetardEingang && RetardEingang <= 500 ) {
+  digitalWrite(RET1, LOW);
+  digitalWrite(RET2, HIGH);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, LOW);} // 43 - 49 % revo 2,28 V 280 - 340 PS
+if ( 501 <= RetardEingang && RetardEingang <= 565 ) {
+  digitalWrite(RET1, LOW);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, HIGH);
+  digitalWrite(RET4, LOW);} // 50 - 55 % Revo 2,61 V 350 - 390 PS
+if ( 566 <= RetardEingang && RetardEingang <= 764 ) {
+  digitalWrite(RET1, LOW);
+  digitalWrite(RET2, LOW);
+  digitalWrite(RET3, LOW);
+  digitalWrite(RET4, HIGH);} // 56 - 61 % Revo 2,93 V 400 - 440 PS
+
+
+
+
+/*
 if ( RetardEingang <= 32 ) { i = 0;}
 if ( 33 <= RetardEingang && RetardEingang <= 97 ) {  i = 1;}
 if ( 98 <= RetardEingang && RetardEingang <= 164 ) {  i = 2;}
@@ -282,7 +295,7 @@ if ( Retard[i] == 195 ){ digitalWrite(RET1, HIGH);
   digitalWrite(RET3, HIGH);
   digitalWrite(RET4, HIGH);}
 
-
+*/
   return;
   //-------------------------------------------------------------------------------------------------
 }
