@@ -118,6 +118,28 @@ void loop()
       retardFormel ();
 
       //-------------------------------------------------------------------
+
+   if (buttonState == LOW  ) {
+    sicherheit++;
+    x = 1; // steigende Flanke dedektiert
+    //nosactive = 0; // nos timer sicher ausgeschaltet
+     digitalWrite(RevoPIN, HIGH);
+     }
+
+     // Abfrage der fallenden Flanke des Transbrake Buttons
+     if (buttonState == HIGH && x == 1 && sicherheit >= 4000) {
+    
+      nosactive = 1; // nos timer einschalten
+      x = 0; //Flanken dedektierung zurücksetzen
+     sicherheit = 0;
+     mDelay = micros(); // zeit speichern am anfang der warteschleife
+     lastDelay = mDelay;
+      }
+
+
+
+
+      
     }
     while (nosactive == 1);
     
