@@ -1,7 +1,7 @@
 
 const int TransbrakePIN = 53;     // the number of the pushbutton pin Transbrake Button
 const int RevoPIN =  51;      // the number of the LED pin NOS
-const int GearPIN =  54;
+
 /*
 const int TransbrakePIN = 2;     // the number of the pushbutton pin Transbrake Button
 const int RevoPIN =  3;      // the number of the LED pin NOS
@@ -46,7 +46,7 @@ void setup() {
  laufzeit=9000000 ; 
  
   pinMode(RevoPIN, OUTPUT);    // Nos Aktiv
-  pinMode(GearPIN, OUTPUT);
+ 
 
 
   // initialize the pushbutton pin as an input:
@@ -54,7 +54,7 @@ void setup() {
  
   //NOS ausgang ausschalten
   digitalWrite(RevoPIN, LOW);
-  digitalWrite(GearPIN, LOW);
+ 
   // REtard Relais
   pinMode(RET1, OUTPUT);
   pinMode(RET2, OUTPUT);
@@ -99,13 +99,13 @@ void loop()
     
     
     do {
-      digitalWrite(GearPIN, HIGH);
+      
       digitalWrite(RevoPIN, HIGH);
       mDelay = micros();           // MicrosekundenzÃ¤hler auslesen
       vDelay = mDelay - lastDelay;  // Differenz zum letzten Durchlauf berechnen
 
       if (vDelay >= laufzeit ) {
-        digitalWrite(GearPIN, LOW);
+      
         digitalWrite(RevoPIN, LOW);  
         digitalWrite(RET1, LOW);
         digitalWrite(RET2, LOW);
