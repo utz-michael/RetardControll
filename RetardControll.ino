@@ -219,7 +219,7 @@ if ( 299 <= RetardEingang && RetardEingang <= 366 ) {
   digitalWrite(RET1, HIGH);// 2°
   digitalWrite(RET2, LOW);// 4°
   digitalWrite(RET3, HIGH);// 8°
-  digitalWrite(RET4, LOW);} // 16°  31 - 46 % revo 1,63 V 180 - 220 PS
+  digitalWrite(RET4, LOW);} // 16°  31 - 36 % revo 1,63 V 180 - 220 PS
 if ( 367 <= RetardEingang && RetardEingang <= 433 ) {
   digitalWrite(RET1, LOW);// 2°
   digitalWrite(RET2, HIGH);// 4°
