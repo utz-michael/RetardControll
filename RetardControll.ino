@@ -200,32 +200,51 @@ void retardFormel() {
   //----- Berechnung des Wiederstandes und des Retards------------------------------------------------
 
 
-if ( RetardEingang <= 366 ) { 
+if ( RetardEingang <= 164 ) { 
   digitalWrite(RET1, LOW);
   digitalWrite(RET2, LOW);
   digitalWrite(RET3, LOW);
   digitalWrite(RET4, LOW);}
+if ( 165 <= RetardEingang && RetardEingang <= 231 ) {
+  digitalWrite(RET1, HIGH);// 2°
+  digitalWrite(RET2, LOW);// 4°
+  digitalWrite(RET3, LOW);// 8°
+  digitalWrite(RET4, LOW);} // 16°  19 - 24 % revo 0,97 V 80 - 120 PS
+if ( 232 <= RetardEingang && RetardEingang <= 298 ) {
+  digitalWrite(RET1, HIGH);// 2°
+  digitalWrite(RET2, HIGH);// 4°
+  digitalWrite(RET3, LOW);// 8°
+  digitalWrite(RET4, LOW);} // 16°  25 - 30 % revo 1,3 V 130 - 170 PS
+if ( 299 <= RetardEingang && RetardEingang <= 366 ) {
+  digitalWrite(RET1, HIGH);// 2°
+  digitalWrite(RET2, LOW);// 4°
+  digitalWrite(RET3, HIGH);// 8°
+  digitalWrite(RET4, LOW);} // 16°  31 - 46 % revo 1,63 V 180 - 220 PS
 if ( 367 <= RetardEingang && RetardEingang <= 433 ) {
-  digitalWrite(RET1, HIGH);
-  digitalWrite(RET2, LOW);
-  digitalWrite(RET3, LOW);
-  digitalWrite(RET4, LOW);} // 37 - 42 % revo 1,96 V 230 - 275 PS
+  digitalWrite(RET1, LOW);// 2°
+  digitalWrite(RET2, HIGH);// 4°
+  digitalWrite(RET3, HIGH);// 8°
+  digitalWrite(RET4, LOW);} // 16°  37 - 42 % revo 1,96 V 230 - 275 PS
 if ( 434 <= RetardEingang && RetardEingang <= 500 ) {
-  digitalWrite(RET1, LOW);
-  digitalWrite(RET2, HIGH);
-  digitalWrite(RET3, LOW);
-  digitalWrite(RET4, LOW);} // 43 - 49 % revo 2,28 V 280 - 340 PS
+  digitalWrite(RET1, HIGH); //2°
+  digitalWrite(RET2, HIGH); // 4°
+  digitalWrite(RET3, HIGH); // 8°
+  digitalWrite(RET4, LOW);} // 16°   43 - 49 % revo 2,28 V 280 - 340 PS
 if ( 501 <= RetardEingang && RetardEingang <= 565 ) {
-  digitalWrite(RET1, LOW);
-  digitalWrite(RET2, LOW);
-  digitalWrite(RET3, HIGH);
-  digitalWrite(RET4, LOW);} // 50 - 55 % Revo 2,61 V 350 - 390 PS
-if ( 566 <= RetardEingang && RetardEingang <= 1023 ) {
-  digitalWrite(RET1, LOW);
-  digitalWrite(RET2, LOW);
-  digitalWrite(RET3, LOW);
-  digitalWrite(RET4, HIGH);} // 56 - 61 % Revo 2,93 V 400 - 440 PS
-
+  digitalWrite(RET1, LOW); // 2°
+  digitalWrite(RET2, LOW); // 4°
+  digitalWrite(RET3, LOW); // 8°
+  digitalWrite(RET4, HIGH);} // 16°  50 - 55 % Revo 2,61 V 350 - 390 PS
+if ( 566 <= RetardEingang && RetardEingang <= 630 ) {
+  digitalWrite(RET1, HIGH); // 2°
+  digitalWrite(RET2, LOW); // 4°
+  digitalWrite(RET3, LOW); // 8°
+  digitalWrite(RET4, HIGH);} // 16°   56 - 61 % Revo 2,93 V 400 - 440 PS
+if ( 631 <= RetardEingang && RetardEingang <= 1023 ) {
+  digitalWrite(RET1, LOW); // 2°
+  digitalWrite(RET2, HIGH); // 4°
+  digitalWrite(RET3, LOW); // 8°
+  digitalWrite(RET4, HIGH);} // 16°   62 - 67 % Revo 3,26 V 450 - 490 PS
 
 
 
