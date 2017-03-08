@@ -40,7 +40,7 @@ const int RET4 = 43;
 
 void setup() {
   
- 
+
   
   // initialize the LED pin as an output:
  laufzeit=9000000 ; 
@@ -73,14 +73,14 @@ void loop()
 {
  
   buttonState = digitalRead(TransbrakePIN); // abfrage ob transbrake gedrückt
-   
+  retardFormel (); 
   // Abfrage der steigenden flanke des Transbrake Buttons
   if (buttonState == LOW  ) {
     sicherheit++;
     x = 1; // steigende Flanke dedektiert
     //nosactive = 0; // nos timer sicher ausgeschaltet
      digitalWrite(RevoPIN, HIGH);
-     retardFormel ();
+     
   }
 
   // Abfrage der fallenden Flanke des Transbrake Buttons
@@ -122,23 +122,7 @@ void loop()
 
       //-------------------------------------------------------------------
 
-   if (buttonState == LOW  ) {
-    sicherheit++;
-    x = 1; // steigende Flanke dedektiert
-    //nosactive = 0; // nos timer sicher ausgeschaltet
-     digitalWrite(RevoPIN, HIGH);
-     }
-
-     // Abfrage der fallenden Flanke des Transbrake Buttons
-     if (buttonState == HIGH && x == 1 && sicherheit >= 4000) {
-    digitalWrite(RevoPIN, LOW);
-    delay (100);
-      nosactive = 1; // nos timer einschalten
-      x = 0; //Flanken dedektierung zurücksetzen
-     sicherheit = 0;
-     mDelay = micros(); // zeit speichern am anfang der warteschleife
-     lastDelay = mDelay;
-      }
+ 
 
 
 
@@ -151,17 +135,13 @@ void loop()
     
   }
   else {
+    
     nosactive = 0;
-  digitalWrite(RET1, LOW);
-  digitalWrite(RET2, LOW);
-  digitalWrite(RET3, LOW);
-  digitalWrite(RET4, LOW);
+  
   }
+  
   nosactive = 0;
-  digitalWrite(RET1, LOW);
-  digitalWrite(RET2, LOW);
-  digitalWrite(RET3, LOW);
-  digitalWrite(RET4, LOW);
+  
   }
 
 
@@ -249,82 +229,7 @@ if ( 566 <= RetardEingang && RetardEingang <= 1023 ) {
 
 
 
-/*
-if ( RetardEingang <= 32 ) { i = 0;}
-if ( 33 <= RetardEingang && RetardEingang <= 97 ) {  i = 1;}
-if ( 98 <= RetardEingang && RetardEingang <= 164 ) {  i = 2;}
-if ( 165 <= RetardEingang && RetardEingang <= 232 ) {  i = 3;}
-if ( 233 <= RetardEingang && RetardEingang <= 299 ) {  i = 4;}
-if ( 300 <= RetardEingang && RetardEingang <= 366 ) {  i = 5;}
-if ( 367 <= RetardEingang && RetardEingang <= 433 ) {  i = 6;}
-if ( 434 <= RetardEingang && RetardEingang <= 500 ) {  i = 7;}
-if ( 501 <= RetardEingang && RetardEingang <= 565 ) {  i = 8;}
-if ( 566 <= RetardEingang && RetardEingang <= 631 ) {  i = 9;}
-if ( 632 <= RetardEingang && RetardEingang <= 698 ) {  i = 10;}
-if ( 699 <= RetardEingang && RetardEingang <= 764 ) {  i = 11;}
-if ( 765 <= RetardEingang && RetardEingang <= 832 ) {  i = 12;}
-if ( 833 <= RetardEingang && RetardEingang <= 899 ) {  i = 13;}
-if ( 900 <= RetardEingang && RetardEingang <= 942 ) {  i = 14;}
-if ( 943 < RetardEingang ) {  i = 15;}
 
-if ( Retard[i] == 0 ){ digitalWrite(RET1, LOW);
-  digitalWrite(RET2, LOW);
-  digitalWrite(RET3, LOW);
-  digitalWrite(RET4, LOW);}
-if ( Retard[i] == 15 ){digitalWrite(RET1, HIGH);
-  digitalWrite(RET2, LOW);
-  digitalWrite(RET3, LOW);
-  digitalWrite(RET4, LOW);}
-if ( Retard[i] == 30 ){ digitalWrite(RET1, LOW);
-  digitalWrite(RET2, HIGH);
-  digitalWrite(RET3, LOW);
-  digitalWrite(RET4, LOW);}
-if ( Retard[i] == 45 ){digitalWrite(RET1, HIGH);
-  digitalWrite(RET2, HIGH);
-  digitalWrite(RET3, LOW);
-  digitalWrite(RET4, LOW);}
-if ( Retard[i] == 60 ){digitalWrite(RET1, LOW);
-  digitalWrite(RET2, LOW);
-  digitalWrite(RET3, HIGH);
-  digitalWrite(RET4, LOW);}
-if ( Retard[i] == 75 ){ digitalWrite(RET1, HIGH);
-  digitalWrite(RET2, LOW);
-  digitalWrite(RET3, HIGH);
-  digitalWrite(RET4, LOW);}
-if ( Retard[i] == 90 ){ digitalWrite(RET1, LOW);
-  digitalWrite(RET2, HIGH);
-  digitalWrite(RET3, HIGH);
-  digitalWrite(RET4, LOW);}
-if ( Retard[i] == 105 ){ digitalWrite(RET1, HIGH);
-  digitalWrite(RET2, HIGH);
-  digitalWrite(RET3, HIGH);
-  digitalWrite(RET4, LOW);}
-if ( Retard[i] == 120 ){ digitalWrite(RET1, LOW);
-  digitalWrite(RET2, LOW);
-  digitalWrite(RET3, LOW);
-  digitalWrite(RET4, HIGH);}
-if ( Retard[i] == 135){ digitalWrite(RET1, HIGH);
-  digitalWrite(RET2, LOW);
-  digitalWrite(RET3, LOW);
-  digitalWrite(RET4, HIGH);}
-if ( Retard[i] == 150 ){ digitalWrite(RET1, LOW);
-  digitalWrite(RET2, HIGH);
-  digitalWrite(RET3, LOW);
-  digitalWrite(RET4, HIGH);}
-if ( Retard[i] == 165 ){ digitalWrite(RET1, HIGH);
-  digitalWrite(RET2, HIGH);
-  digitalWrite(RET3, LOW);
-  digitalWrite(RET4, HIGH);}
-if ( Retard[i] == 180 ){ digitalWrite(RET1, LOW);
-  digitalWrite(RET2, LOW);
-  digitalWrite(RET3, HIGH);
-  digitalWrite(RET4, HIGH);}
-if ( Retard[i] == 195 ){ digitalWrite(RET1, HIGH);
-  digitalWrite(RET2, LOW);
-  digitalWrite(RET3, HIGH);
-  digitalWrite(RET4, HIGH);}
-
-*/
   return;
   //-------------------------------------------------------------------------------------------------
 }
