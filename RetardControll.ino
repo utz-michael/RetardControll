@@ -86,7 +86,7 @@ void loop()
   // Abfrage der fallenden Flanke des Transbrake Buttons
   if (buttonState == HIGH && x == 1 && sicherheit >= 4000) {
     digitalWrite(RevoPIN, LOW);
-    delay (100);
+    delay (30);
     
     nosactive = 1; // nos timer einschalten
     x = 0; //Flanken dedektierung zurücksetzen
