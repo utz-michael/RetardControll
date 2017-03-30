@@ -207,13 +207,13 @@ if ( RetardEingang <= 164 ) {
   digitalWrite(RET4, LOW);}
 if ( 165 <= RetardEingang && RetardEingang <= 231 ) {
   digitalWrite(RET1, HIGH);// 2°
-  digitalWrite(RET2, LOW);// 4°
+  digitalWrite(RET2, HIGH);// 4°
   digitalWrite(RET3, LOW);// 8°
   digitalWrite(RET4, LOW);} // 16°  19 - 24 % revo 0,97 V 80 - 120 PS
 if ( 232 <= RetardEingang && RetardEingang <= 298 ) {
-  digitalWrite(RET1, HIGH);// 2°
-  digitalWrite(RET2, HIGH);// 4°
-  digitalWrite(RET3, LOW);// 8°
+  digitalWrite(RET1, LOW);// 2°
+  digitalWrite(RET2, LOW);// 4°
+  digitalWrite(RET3, HIGH);// 8°
   digitalWrite(RET4, LOW);} // 16°  25 - 30 % revo 1,3 V 130 - 170 PS
 if ( 299 <= RetardEingang && RetardEingang <= 366 ) {
   digitalWrite(RET1, HIGH);// 2°
@@ -226,7 +226,7 @@ if ( 367 <= RetardEingang && RetardEingang <= 433 ) {
   digitalWrite(RET3, HIGH);// 8°
   digitalWrite(RET4, LOW);} // 16°  37 - 42 % revo 1,96 V 230 - 275 PS
 if ( 434 <= RetardEingang && RetardEingang <= 500 ) {
-  digitalWrite(RET1, HIGH); //2°
+  digitalWrite(RET1, LOW); //2°
   digitalWrite(RET2, HIGH); // 4°
   digitalWrite(RET3, HIGH); // 8°
   digitalWrite(RET4, LOW);} // 16°   43 - 49 % revo 2,28 V 280 - 340 PS
