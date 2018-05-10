@@ -4,7 +4,7 @@
 
 const int TransbrakePIN = 53;     // the number of the pushbutton pin Transbrake Button
 const int RevoPIN =  51;      // the number of the LED pin NOS
-
+const int gangPIN =  4;  
 /*
 const int TransbrakePIN = 2;     // the number of the pushbutton pin Transbrake Button
 const int RevoPIN =  3;      // the number of the LED pin NOS
@@ -50,7 +50,13 @@ const int RET4 = 43;
 
 void setup() {
   Serial.begin(9600);        // connect to the serial port 
-
+//---------------------------------------------- Set PWM frequency for D4 & D13 ------------------------------
+ 
+TCCR0B = TCCR0B & B11111000 | B00000001;    // set timer 0 divisor to     1 for PWM frequency of 62500.00 Hz
+//TCCR0B = TCCR0B & B11111000 | B00000010;    // set timer 0 divisor to     8 for PWM frequency of  7812.50 Hz
+//  TCCR0B = TCCR0B & B11111000 | B00000011;    <// set timer 0 divisor to    64 for PWM frequency of   976.56 Hz (Default)
+//TCCR0B = TCCR0B & B11111000 | B00000100;    // set timer 0 divisor to   256 for PWM frequency of   244.14 Hz
+//TCCR0B = TCCR0B & B11111000 | B00000101;    // set timer 0 divisor to  1024 for PWM frequency of    61.04 Hz
   
 //gang einlesen
 setup_gear_timer();
@@ -81,7 +87,7 @@ Serial.print(gang);
   digitalWrite(RET2, LOW);
   digitalWrite(RET3, LOW);
   digitalWrite(RET4, LOW);
-
+  analogWrite(gangPIN, (0*51)); //gang 1
 
   nosactive = 0; // nos sicher deaktivieren
   
@@ -97,13 +103,13 @@ void loop()
     x = 1; // steigende Flanke dedektiert
     //nosactive = 0; // nos timer sicher ausgeschaltet
      digitalWrite(RevoPIN, HIGH);
+     analogWrite(gangPIN, (0*51)); //gang 1
      
   }
 
   // Abfrage der fallenden Flanke des Transbrake Buttons
   if (buttonState == HIGH && x == 1 && sicherheit >= 4000) {
-    digitalWrite(RevoPIN, LOW);
-    delay (30);
+    
     
     nosactive = 1; // nos timer einschalten
     x = 0; //Flanken dedektierung zurücksetzen
@@ -121,14 +127,13 @@ void loop()
     do {
       
       digitalWrite(RevoPIN, HIGH);
+      analogWrite(gangPIN, (1*51)); //gang 2
       mDelay = micros();           // MicrosekundenzÃ¤hler auslesen
       vDelay = mDelay - lastDelay;  // Differenz zum letzten Durchlauf berechnen
 
 // dritter Gang schalten //
        if (vDelay >= gang && geschalten == 0){
-        digitalWrite(RevoPIN, LOW);
-        delay (30);
-        digitalWrite(RevoPIN, HIGH);
+        analogWrite(gangPIN, (2*51)); //gang 3
         geschalten = 1;
        }
 
