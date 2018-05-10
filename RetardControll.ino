@@ -1,4 +1,7 @@
 
+#include <EEPROM.h>
+
+
 const int TransbrakePIN = 53;     // the number of the pushbutton pin Transbrake Button
 const int RevoPIN =  51;      // the number of the LED pin NOS
 
@@ -13,6 +16,13 @@ int nosactive;
 int x;
 
 int geschalten = 0;
+
+int val = 0; //zuerst steht der Motor
+char incoming[4] = {}; //wegen Endzeichen
+int setup1 = 0;
+int gang3sekunden;
+int gang3zehntelsekunden;
+
 //int i;
 //int i_old;
 unsigned long lastDelay = 0;
@@ -28,58 +38,27 @@ int RetardEingang;
 #define filterSamples   9              // filterSamples should  be an odd number, no smaller than 3
 int sensSmoothArray1 [filterSamples];   // array for holding raw sensor values for sensor1
 
-// spi port für wiederstand
-/*
-const int RET1 = 10;
-const int RET2 = 11;
-const int RET3 = 12;
-const int RET4 = 13;
-*/
+
 
 const int RET1 = 49;
 const int RET2 = 47;
 const int RET3 = 45;
 const int RET4 = 43;
-// gang setup
-const int gangSekunden1 = 22;
-const int gangSekunden2 = 23;
-const int gangSekunden4 = 24;
-const int gangSekunden8 = 25;
 
-const int gangZentelSekunden1 = 26;
-const int gangZentelSekunden2 = 27;
-const int gangZentelSekunden4 = 28;
-const int gangZentelSekunden8 = 29;
 
 
 
 void setup() {
+  Serial.begin(9600);        // connect to the serial port 
+
   
 //gang einlesen
-pinMode(gangSekunden1, INPUT_PULLUP);
-pinMode(gangSekunden2, INPUT_PULLUP);
-pinMode(gangSekunden4, INPUT_PULLUP);
-pinMode(gangSekunden8, INPUT_PULLUP);
+setup_gear_timer();
 
-pinMode(gangZentelSekunden1, INPUT_PULLUP);
-pinMode(gangZentelSekunden2, INPUT_PULLUP);
-pinMode(gangZentelSekunden4, INPUT_PULLUP);
-pinMode(gangZentelSekunden8, INPUT_PULLUP);
-
-gang = digitalRead(gangSekunden1);
-gang = gang + (2*digitalRead(gangSekunden2));
-gang = gang + (4*digitalRead(gangSekunden4));
-gang = gang + (8*digitalRead(gangSekunden8));
-gang = gang *10;
-
-gang = gang + digitalRead(gangZentelSekunden1);
-gang = gang + (2*digitalRead(gangZentelSekunden2));
-gang = gang + (4*digitalRead(gangZentelSekunden4));
-gang = gang + (8*digitalRead(gangZentelSekunden8));
-gang = gang * 100000;
-
-
-  
+gang3sekunden = EEPROM.read(0);
+gang3zehntelsekunden = EEPROM.read(1);
+gang = ((gang3sekunden * 10)+ gang3zehntelsekunden)*100000;
+Serial.print(gang);  
   // initialize the LED pin as an output:
  laufzeit=9000000 ; 
  
@@ -303,3 +282,129 @@ if ( 631 <= RetardEingang && RetardEingang <= 1023 ) {
   return;
   //-------------------------------------------------------------------------------------------------
 }
+
+void setup_gear_timer(){
+do 
+{
+int i = 0;
+ Serial.println(millis());
+  if (Serial.available() > 0) {
+    //sonst bleiben die 0 erhalten 60 -> 600
+    memset(incoming, 0, sizeof(incoming));
+    while (Serial.available() > 0 && i < sizeof(incoming) - 1) {
+      incoming[i] = Serial.read();
+      i++;
+      delay(3);
+    }
+ 
+    //array of char in int wandeln
+   
+ 
+    Serial.print("Setup");
+    setup1=1;
+    //Serial.println(val);
+    //Motorgeschwindigkeit setzen
+    
+  }
+}while ((millis()<=2000)&& setup1 == 0);
+
+
+if (setup1==1){
+Serial.println("Schaltzeitpunkt 3. Gang");
+gang3sekunden = EEPROM.read(0);
+gang3zehntelsekunden = EEPROM.read(1);
+Serial.print("Aktueller Wert: ");
+Serial.print(gang3sekunden);
+Serial.print(",");
+Serial.print(gang3zehntelsekunden);
+Serial.println("s");
+Serial.print("Neuer Wert für Sekunden:");
+do 
+{
+int i = 0;
+ 
+  if (Serial.available() > 0) {
+    //sonst bleiben die 0 erhalten 60 -> 600
+    memset(incoming, 0, sizeof(incoming));
+    while (Serial.available() > 0 && i < sizeof(incoming) - 1) {
+      incoming[i] = Serial.read();
+      i++;
+      delay(3);
+    }
+ 
+    //array of char in int wandeln
+    val = atoi(incoming);
+    //Geschwindigkeit limitieren
+    if (val < 0) {
+      val = 0;
+    } else if (val > 9) {
+      val = 9;
+    }
+ 
+    Serial.print(val);
+    gang3sekunden = val;
+    EEPROM.write(0, gang3sekunden);
+    setup1=3;
+    //Serial.println(val);
+    //Motorgeschwindigkeit setzen
+    
+  }
+}while (setup1 != 3 );
+Serial.println();
+Serial.print("Neuer Wert für Zehntelsekunden:");
+do 
+{
+int i = 0;
+ 
+  if (Serial.available() > 0) {
+    //sonst bleiben die 0 erhalten 60 -> 600
+    memset(incoming, 0, sizeof(incoming));
+    while (Serial.available() > 0 && i < sizeof(incoming) - 1) {
+      incoming[i] = Serial.read();
+      i++;
+      delay(3);
+    }
+ 
+    //array of char in int wandeln
+    val = atoi(incoming);
+    //Geschwindigkeit limitieren
+    if (val < 0) {
+      val = 0;
+    } else if (val > 9) {
+      val = 9;
+    }
+ 
+    Serial.print(val);
+    gang3zehntelsekunden = val;
+    EEPROM.write(1, gang3zehntelsekunden);
+    setup1=4;
+    //Serial.println(val);
+    //Motorgeschwindigkeit setzen
+    
+  }
+}while (setup1 != 4 );
+
+Serial.println();
+Serial.println("Schaltzeitpunkt 3. Gang");
+gang3sekunden = EEPROM.read(0);
+gang3zehntelsekunden = EEPROM.read(1);
+Serial.print("Aktueller Wert: ");
+Serial.print(gang3sekunden);
+Serial.print(",");
+Serial.print(gang3zehntelsekunden);
+Serial.println("s");
+
+
+
+
+
+}
+
+
+
+
+
+
+}
+
+
