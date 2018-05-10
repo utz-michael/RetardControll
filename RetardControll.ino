@@ -39,7 +39,7 @@ int RetardEingang;
 int sensSmoothArray1 [filterSamples];   // array for holding raw sensor values for sensor1
 
 
-
+int multi = 64 ;
 const int RET1 = 49;
 const int RET2 = 47;
 const int RET3 = 45;
@@ -54,19 +54,19 @@ void setup() {
  
 TCCR0B = TCCR0B & B11111000 | B00000001;    // set timer 0 divisor to     1 for PWM frequency of 62500.00 Hz
 //TCCR0B = TCCR0B & B11111000 | B00000010;    // set timer 0 divisor to     8 for PWM frequency of  7812.50 Hz
-//  TCCR0B = TCCR0B & B11111000 | B00000011;    <// set timer 0 divisor to    64 for PWM frequency of   976.56 Hz (Default)
+// TCCR0B = TCCR0B & B11111000 | B00000011;    // set timer 0 divisor to    64 for PWM frequency of   976.56 Hz (Default)
 //TCCR0B = TCCR0B & B11111000 | B00000100;    // set timer 0 divisor to   256 for PWM frequency of   244.14 Hz
 //TCCR0B = TCCR0B & B11111000 | B00000101;    // set timer 0 divisor to  1024 for PWM frequency of    61.04 Hz
-  
+
 //gang einlesen
 setup_gear_timer();
 
 gang3sekunden = EEPROM.read(0);
 gang3zehntelsekunden = EEPROM.read(1);
-gang = ((gang3sekunden * 10)+ gang3zehntelsekunden)*100000;
+gang = ((gang3sekunden * 10)+ gang3zehntelsekunden)*100000 * multi ;
 Serial.print(gang);  
   // initialize the LED pin as an output:
- laufzeit=9000000 ; 
+ laufzeit=9000000 * multi ; 
  
   pinMode(RevoPIN, OUTPUT);    // Nos Aktiv
  
@@ -108,7 +108,7 @@ void loop()
   }
 
   // Abfrage der fallenden Flanke des Transbrake Buttons
-  if (buttonState == HIGH && x == 1 && sicherheit >= 4000) {
+  if (buttonState == HIGH && x == 1 && sicherheit >= 4000  ) {
     
     
     nosactive = 1; // nos timer einschalten
@@ -127,20 +127,25 @@ void loop()
     do {
       
       digitalWrite(RevoPIN, HIGH);
+      if (geschalten ==0){
       analogWrite(gangPIN, (1*51)); //gang 2
+      }
       mDelay = micros();           // MicrosekundenzÃ¤hler auslesen
       vDelay = mDelay - lastDelay;  // Differenz zum letzten Durchlauf berechnen
 
 // dritter Gang schalten //
+
+
        if (vDelay >= gang && geschalten == 0){
-        analogWrite(gangPIN, (2*51)); //gang 3
+       
+        analogWrite(gangPIN,(2*51)); //gang 3
         geschalten = 1;
        }
 
 
 
 
-      if (vDelay >= laufzeit ) {
+      if (vDelay >= (laufzeit )) {
       
         digitalWrite(RevoPIN, LOW);  
         digitalWrite(RET1, LOW);
@@ -149,6 +154,7 @@ void loop()
         digitalWrite(RET4, LOW);
         geschalten = 0;
         nosactive = 0;
+        analogWrite(gangPIN,(0*51));
       }
       //---------------------------------------------------------------------
 
@@ -311,7 +317,6 @@ int i = 0;
     //Motorgeschwindigkeit setzen
     
   }
-}while ((millis()<=2000)&& setup1 == 0);
 
 
 if (setup1==1){
