@@ -11,15 +11,12 @@ int buttonState = HIGH; // variable for reading the pushbutton status
 
 int nosactive;
 int x;
-
-int geschalten = 0;
 //int i;
 //int i_old;
 unsigned long lastDelay = 0;
 unsigned long mDelay;
 unsigned long vDelay;
 unsigned long laufzeit;
-unsigned long gang;
 
 unsigned long sicherheit = 0;
 
@@ -40,44 +37,9 @@ const int RET1 = 49;
 const int RET2 = 47;
 const int RET3 = 45;
 const int RET4 = 43;
-// gang setup
-const int gangSekunden1 = 22;
-const int gangSekunden2 = 23;
-const int gangSekunden4 = 24;
-const int gangSekunden8 = 25;
-
-const int gangZentelSekunden1 = 26;
-const int gangZentelSekunden2 = 27;
-const int gangZentelSekunden4 = 28;
-const int gangZentelSekunden8 = 29;
-
-
 
 void setup() {
   
-//gang einlesen
-pinMode(gangSekunden1, INPUT_PULLUP);
-pinMode(gangSekunden2, INPUT_PULLUP);
-pinMode(gangSekunden4, INPUT_PULLUP);
-pinMode(gangSekunden8, INPUT_PULLUP);
-
-pinMode(gangZentelSekunden1, INPUT_PULLUP);
-pinMode(gangZentelSekunden2, INPUT_PULLUP);
-pinMode(gangZentelSekunden4, INPUT_PULLUP);
-pinMode(gangZentelSekunden8, INPUT_PULLUP);
-
-gang = digitalRead(gangSekunden1);
-gang = gang + (2*digitalRead(gangSekunden2));
-gang = gang + (4*digitalRead(gangSekunden4));
-gang = gang + (8*digitalRead(gangSekunden8));
-gang = gang *10;
-
-gang = gang + digitalRead(gangZentelSekunden1);
-gang = gang + (2*digitalRead(gangZentelSekunden2));
-gang = gang + (4*digitalRead(gangZentelSekunden4));
-gang = gang + (8*digitalRead(gangZentelSekunden8));
-gang = gang * 100000;
-
 
   
   // initialize the LED pin as an output:
@@ -145,17 +107,6 @@ void loop()
       mDelay = micros();           // MicrosekundenzÃ¤hler auslesen
       vDelay = mDelay - lastDelay;  // Differenz zum letzten Durchlauf berechnen
 
-// dritter Gang schalten //
-       if (vDelay >= gang && geschalten == 0){
-        digitalWrite(RevoPIN, LOW);
-        delay (30);
-        digitalWrite(RevoPIN, HIGH);
-        geschalten = 1;
-       }
-
-
-
-
       if (vDelay >= laufzeit ) {
       
         digitalWrite(RevoPIN, LOW);  
@@ -163,7 +114,6 @@ void loop()
         digitalWrite(RET2, LOW);
         digitalWrite(RET3, LOW);
         digitalWrite(RET4, LOW);
-        geschalten = 0;
         nosactive = 0;
       }
       //---------------------------------------------------------------------
@@ -187,12 +137,11 @@ void loop()
   else {
     
     nosactive = 0;
-    geschalten = 0;
   
   }
   
   nosactive = 0;
-  geschalten = 0;
+  
   }
 
 
